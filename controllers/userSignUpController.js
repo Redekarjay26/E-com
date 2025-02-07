@@ -1,15 +1,15 @@
+import asyncHandler from 'express-async-handler'
 import userModel from '../module/userModel.js'
 import bcrypt from 'bcrypt'
+import { generateToken } from '../utils/generateToken.js'
 
-export const userSignUpController = async (req, res) => {
+export const userSignUpController = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body
 
   const emailExist = await userModel.findOne({ email })
 
   if (emailExist) {
-    res.json({
-      msg: 'email ID allready exist',
-    })
+    throw new Error('email ID allready exist')
   }
   //has password
   const salt = await bcrypt.genSalt(10)
@@ -25,9 +25,9 @@ export const userSignUpController = async (req, res) => {
     msg: 'user created successfully',
     data: user,
   })
-}
+})
 
-export const userLogin = async (req, res) => {
+export const userLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body
   const userFound = await userModel.findOne({ email })
 
@@ -39,10 +39,9 @@ export const userLogin = async (req, res) => {
       status: 'success',
       msg: 'user created sussessfully',
       userFound,
+      token: generateToken(userFound?._id),
     })
   } else {
-    res.json({
-      msg: 'user invalid',
-    })
+    throw new Error('invalid user')
   }
-}
+})
