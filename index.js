@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import router from './routes/index.js'
 import connectDB from './config/db.js'
 import { globalErrHandler, notFound } from './middlewares/globalErrHandler.js'
+import ProductsRoutes from './routes/ProductRoutes.js'
 
 dotenv.config()
 
@@ -15,6 +16,7 @@ connectDB()
 const PORT = process.env.PORT || 5000
 
 app.use('/', router)
+app.use('/', ProductsRoutes)
 
 app.use(notFound)
 app.use(globalErrHandler)

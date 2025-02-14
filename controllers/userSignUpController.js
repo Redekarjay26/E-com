@@ -49,10 +49,9 @@ export const userLoginController = asyncHandler(async (req, res) => {
 })
 
 export const getUserProfileController = asyncHandler(async (req, res) => {
-  const token = getTokenForm(req)
-  console.log(token)
+  const token = await getTokenForm(req)
   const verified = verifyToken(token)
-  console.log(verified)
+  console.log(req)
 
   res.json({
     msg: 'user profile created',
